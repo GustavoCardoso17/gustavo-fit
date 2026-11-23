@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0B0F17" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Gustavo Fit" />
+  <title>GUSTAVO FIT • Treino Sem Frescura</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%23FF5500'/%3E%3Cpath d='M25 40h8v20h-8zm42 0h8v20h-8zM33 47h34v6H33zM18 44h7v12h-7zm57 0h7v12h-7z' fill='%23FFFFFF'/%3E%3C/svg%3E" />
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%23FF5500'/%3E%3Cpath d='M25 40h8v20h-8zm42 0h8v20h-8zM33 47h34v6H33zM18 44h7v12h-7zm57 0h7v12h-7z' fill='%23FFFFFF'/%3E%3C/svg%3E" />
+  <style>
+    :root {
+      --bg-main: #0B0F17;
+      --bg-card: #131A26;
+      --bg-card-inner: #0F141E;
+      --border-subtle: #1F293A;
+      --accent: #FF5500;
+      --accent-hover: #E04B00;
+      --accent-soft: rgba(255, 85, 0, 0.14);
+      --green: #10B981;
+      --green-soft: rgba(16, 185, 129, 0.14);
+      --blue: #38BDF8;
+      --text-primary: #F8FAFC;
+      --text-secondary: #94A3B8;
+      --text-muted: #64748B;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-primary);
+      min-height: 100vh;
+      padding-bottom: 40px;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 18px;
+      padding-top: 4px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 4px 14px rgba(255, 85, 0, 0.35);
+    }
+
+    .brand-title {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 0.4px;
+      line-height: 1.1;
+    }
+
+    .brand-title span {
+      color: var(--accent);
+    }
+
+    .save-status {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      color: var(--blue);
+      margin-top: 3px;
+      font-weight: 500;
+    }
+
+    .save-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--blue);
+    }
+
+    .timer-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .timer-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-variant-numeric: tabular-nums;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .timer-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--text-muted);
+    }
+
+    .timer-dot.running {
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
+    }
+
+    .icon-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .icon-btn:active {
+      transform: scale(0.94);
+    }
+
+    .play-btn {
+      background: none;
+      border: none;
+      color: var(--blue);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2px;
+    }
+
+    .week-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+      margin-bottom: 18px;
+    }
+
+    .day-pill {
+      position: relative;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 10px 4px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .day-pill.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      box-shadow: 0 4px 14px rgba(255, 85, 0, 0.35);
+    }
+
+    .today-badge {
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #22D3EE;
+      color: #06202A;
+      font-size: 9px;
+      font-weight: 800;
+      padding: 1px 6px;
+      border-radius: 999px;
+      letter-spacing: 0.3px;
+    }
+
+    .day-name {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .day-sub {
+      font-size: 10px;
+      font-weight: 700;
+      margin-top: 3px;
+      color: var(--text-secondary);
+    }
+
+    .day-pill.off .day-sub {
+      color: var(--blue);
+    }
+
+    .day-pill.active .day-sub {
+      color: #FFFFFF;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+
+    .tag-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--green-soft);
+      color: var(--green);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+      margin-bottom: 12px;
+    }
+
+    .tag-pill.workout {
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-color: rgba(255, 85, 0, 0.25);
+    }
+
+    .hero-title {
+      font-size: 20px;
+      font-weight: 800;
+      line-height: 1.25;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .hero-desc {
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+    }
+
+    .progress-box {
+      background: var(--bg-card-inner);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 12px 14px;
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .progress-header span:last-child {
+      color: var(--blue);
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 7px;
+      background: #1B2434;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), #FF8800);
+      border-radius: 999px;
+      transition: width 0.25s ease;
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .task-item {
+      background: var(--bg-card-inner);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 10px;
+      transition: border-color 0.2s;
+    }
+
+    .task-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .task-item.done {
+      border-color: rgba(16, 185, 129, 0.45);
+      background: rgba(16, 185, 129, 0.05);
+    }
+
+    .task-top {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+    }
+
+    .checkbox {
+      width: 22px;
+      height: 22px;
+      border-radius: 7px;
+      border: 2px solid #334155;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.15s ease;
+    }
+
+    .task-item.done .checkbox {
+      background: var(--green);
+      border-color: var(--green);
+    }
+
+    .task-info {
+      flex: 1;
+    }
+
+    .task-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .task-item.done .task-name {
+      text-decoration: line-through;
+      color: var(--text-secondary);
+    }
+
+    .task-meta {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    .weight-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .weight-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+    }
+
+    .weight-controls {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .step-btn {
+      background: #1A2333;
+      border: 1px solid var(--border-subtle);
+      color: var(--text-primary);
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .step-btn:active {
+      background: var(--accent);
+    }
+
+    .weight-input {
+      width: 64px;
+      height: 30px;
+      background: var(--bg-main);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      color: var(--text-primary);
+      text-align: center;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .weight-input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .unit-text {
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+
+    .footer-actions {
+      display: flex;
+      justify-content: center;
+      margin-top: 16px;
+    }
+
+    .reset-day-btn {
+      background: transparent;
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 999px;
+      cursor: pointer;
+    }
+
+    .reset-day-btn:active {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="brand-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6.5 6.5h11M6.5 17.5h11M4 9v6M20 9v6M2 10.5v3M22 10.5v3M12 6.5v11"/>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-title">GUSTAVO <span>FIT</span></div>
+          <div class="save-status">
+            <span class="save-dot"></span>
+            <span id="saveLabel">✓ Salvo no aparelho</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timer-group">
+        <div class="timer-pill">
+          <span class="timer-dot" id="timerDot"></span>
+          <span id="timerDisplay">00:00</span>
+          <button class="play-btn" id="timerToggle" aria-label="Iniciar ou pausar cronômetro">
+            <svg id="playIcon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+          </button>
+        </div>
+        <button class="icon-btn" id="timerReset" aria-label="Zerar cronômetro">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+            <path d="M3 3v5h5"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="week-grid" id="weekGrid"></div>
+
+    <div class="card">
+      <div class="tag-pill" id="dayBadge"></div>
+      <h1 class="hero-title" id="heroTitle"></h1>
+      <p class="hero-desc" id="heroDesc"></p>
+
+      <div class="progress-box">
+        <div class="progress-header">
+          <span id="progressLabel">Checklist do Dia</span>
+          <span id="progressStats">0/0 (0%)</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-label" id="sectionLabel">EXERCÍCIOS & METAS</div>
+      <div id="taskList"></div>
+    </div>
+
+    <div class="footer-actions">
+      <button class="reset-day-btn" id="resetDayBtn">Limpar marcações de hoje</button>
+    </div>
+  </div>
+
+  <script>
+    const WORKOUT_PLAN = {
+      SEG: {
+        short: "SEG",
+        isOff: false,
+        badge: "Segunda • Peito, Ombro & Tríceps",
+        title: "EMPURRAR + CARDIO QUEIMA",
+        desc: "Foco em execução controlada para definição superior e esteira no pós-treino para acelerar a queima abdominal.",
+        progressTitle: "Progresso do Treino",
+        sectionTitle: "TREINO A • EMPURRAR + ESTEIRA",
+        tasks: [
+          { id: "seg_1", name: "Supino Reto (Barra ou Halteres)", meta: "4 séries • 10 a 12 reps", hasWeight: true, defaultWeight: 20 },
+          { id: "seg_2", name: "Supino Inclinado com Halteres", meta: "3 séries • 10 a 12 reps", hasWeight: true, defaultWeight: 16 },
+          { id: "seg_3", name: "Desenvolvimento Ombros", meta: "3 séries • 12 reps", hasWeight: true, defaultWeight: 12 },
+          { id: "seg_4", name: "Elevação Lateral", meta: "4 séries • 12 a 15 reps", hasWeight: true, defaultWeight: 8 },
+          { id: "seg_5", name: "Tríceps Pulley Corda", meta: "4 séries • 12 a 15 reps", hasWeight: true, defaultWeight: 25 },
+          { id: "seg_6", name: "Esteira (Caminhada Inclinada / Trote)", meta: "20 a 25 min • Ritmo constante", hasWeight: false }
+        ]
+      },
+      TER: {
+        short: "TER",
+        isOff: false,
+        badge: "Terça • Costas, Bíceps & Core",
+        title: "PUXAR + ABDÔMEN",
+        desc: "Trabalhe bem a amplitude nas puxadas para postura e finalize fortalecendo a parede abdominal.",
+        progressTitle: "Progresso do Treino",
+        sectionTitle: "TREINO B • PUXAR + CORE",
+        tasks: [
+          { id: "ter_1", name: "Puxada Frontal Aberta (Pulley)", meta: "4 séries • 10 a 12 reps", hasWeight: true, defaultWeight: 45 },
+          { id: "ter_2", name: "Remada Baixa Triângulo", meta: "4 séries • 10 a 12 reps", hasWeight: true, defaultWeight: 40 },
+          { id: "ter_3", name: "Remada Unilateral (Serrote)", meta: "3 séries • 12 reps cada lado", hasWeight: true, defaultWeight: 18 },
+          { id: "ter_4", name: "Rosca Direta (Barra ou Halteres)", meta: "3 séries • 12 reps", hasWeight: true, defaultWeight: 12 },
+          { id: "ter_5", name: "Rosca Martelo", meta: "3 séries • 12 reps", hasWeight: true, defaultWeight: 10 },
+          { id: "ter_6", name: "Prancha Isométrica + Infra", meta: "3 séries • 45s prancha + 15 reps", hasWeight: false }
+        ]
+      },
+      QUA: {
+        short: "QUA",
+        isOff: false,
+        badge: "Quarta • Pernas & Cardio",
+        title: "MEMBROS INFERIORES + ESTEIRA",
+        desc: "Treino de pernas eleva o gasto calórico basal. Mantenha a postura firme e respire bem entre as séries.",
+        progressTitle: "Progresso do Treino",
+        sectionTitle: "TREINO C • PERNAS + CARDIO",
+        tasks: [
+          { id: "qua_1", name: "Agachamento Livre ou Guiado (Smith)", meta: "4 séries • 10 a 12 reps", hasWeight: true, defaultWeight: 30 },
+          { id: "qua_2", name: "Leg Press 45°", meta: "4 séries • 12 reps", hasWeight: true, defaultWeight: 100 },
+          { id: "qua_3", name: "Cadeira Extensora", meta: "3 séries • 12 a 15 reps", hasWeight: true, defaultWeight: 35 },
+          { id: "qua_4", name: "Mesa Flexora", meta: "4 séries • 12 reps", hasWeight: true, defaultWeight: 30 },
+          { id: "qua_5", name: "Panturrilha em Pé ou Sentado", meta: "4 séries • 15 reps", hasWeight: true, defaultWeight: 30 },
+          { id: "qua_6", name: "Esteira Moderada", meta: "15 a 20 min • Pós-treino", hasWeight: false }
+        ]
+      },
+      QUI: {
+        short: "QUI",
+        isOff: false,
+        badge: "Quinta • Superior Completo",
+        title: "SUPERIOR + DEFINIÇÃO",
+        desc: "Estímulo metabólico para tronco e braços mantendo descanso curto (45s a 60s) entre séries.",
+        progressTitle: "Progresso do Treino",
+        sectionTitle: "TREINO D • SUPERIOR METABÓLICO",
+        tasks: [
+          { id: "qui_1", name: "Supino Máquina ou Flexão", meta: "3 séries • 12 a 15 reps", hasWeight: true, defaultWeight: 35 },
+          { id: "qui_2", name: "Puxada Supinada", meta: "3 séries • 12 reps", hasWeight: true, defaultWeight: 40 },
+          { id: "qui_3", name: "Elevação Lateral + Frontal", meta: "3 séries • 12 reps", hasWeight: true, defaultWeight: 7 },
+          { id: "qui_4", name: "Tríceps Francês ou Testa", meta: "3 séries • 12 reps", hasWeight: true, defaultWeight: 14 },
+          { id: "qui_5", name: "Rosca Alternada", meta: "3 séries • 12 reps", hasWeight: true, defaultWeight: 10 },
+          { id: "qui_6", name: "Esteira HIIT (1 min rápido / 1 min leve)", meta: "20 min total", hasWeight: false }
+        ]
+      },
+      SEX: {
+        short: "SEX",
+        isOff: false,
+        badge: "Sexta • Full Body & Queima Final",
+        title: "FECHAMENTO DA SEMANA",
+        desc: "Último gás antes do descanso do fim de semana. Foco total em gasto calórico e abdômen.",
+        progressTitle: "Progresso do Treino",
+        sectionTitle: "TREINO E • FULL BODY + CARDIO",
+        tasks: [
+          { id: "sex_1", name: "Agachamento Goblet com Halter", meta: "3 séries • 15 reps", hasWeight: true, defaultWeight: 16 },
+          { id: "sex_2", name: "Remada Curvada ou Máquina", meta: "3 séries • 12 reps", hasWeight: true, defaultWeight: 35 },
+          { id: "sex_3", name: "Crucifixo Máquina (Peck Deck)", meta: "3 séries • 12 a 15 reps", hasWeight: true, defaultWeight: 35 },
+          { id: "sex_4", name: "Abdominal Supra + Prancha", meta: "4 séries • 15 reps + 40s", hasWeight: false },
+          { id: "sex_5", name: "Esteira (Caminhada Rápida Inclinada)", meta: "25 a 30 min • Queima máxima", hasWeight: false }
+        ]
+      },
+      SAB: {
+        short: "SÁB",
+        isOff: true,
+        badge: "Sábado • Descanso Ativo",
+        title: "RECUPERAÇÃO ATIVA & DIETA",
+        desc: "Dia sem musculação pesada. Mantenha a alimentação limpa e o corpo em movimento leve.",
+        progressTitle: "Checklist de Recuperação",
+        sectionTitle: "HÁBITOS DE RECUPERAÇÃO OPCIONAIS",
+        tasks: [
+          { id: "sab_1", name: "Hidratação em dia (3L+ de água)", meta: "Fundamental para retenção e metabolismo", hasWeight: false },
+          { id: "sab_2", name: "Bater meta de proteínas do dia", meta: "Preserva massa magra no déficit", hasWeight: false },
+          { id: "sab_3", name: "Caminhada leve ao ar livre (30 min)", meta: "Opcional • Ajuda na queima calórica", hasWeight: false },
+          { id: "sab_4", name: "7h a 8h de sono reparador", meta: "Regulação hormonal e recuperação", hasWeight: false }
+        ]
+      },
+      DOM: {
+        short: "DOM",
+        isOff: true,
+        badge: "Domingo • Descanso Total",
+        title: "DESCANSO TOTAL & PREPARAÇÃO",
+        desc: "Recarregue para destruir na segunda! É no descanso que a musculatura reconstrói e o metabolismo regula para queimar gordura.",
+        progressTitle: "Checklist de Recuperação",
+        sectionTitle: "HÁBITOS DE RECUPERAÇÃO OPCIONAIS",
+        tasks: [
+          { id: "dom_1", name: "Hidratação em dia (3L+ de água)", meta: "Manter consumo constante ao longo do dia", hasWeight: false },
+          { id: "dom_2", name: "Manter dieta sem exageros", meta: "Evitar álcool e excesso de açúcar", hasWeight: false },
+          { id: "dom_3", name: "Alongamento leve / mobilidade (10 min)", meta: "Alivia tensões da semana", hasWeight: false },
+          { id: "dom_4", name: "Dormir cedo para o treino de segunda", meta: "Preparar roupa e garrafa d'água", hasWeight: false }
+        ]
+      }
+    };
+
+    const DAY_KEYS = ["SEG", "TER", "QUA", "QUI", "SEX", "SAB", "DOM"];
+    const JS_DAY_TO_KEY = ["DOM", "SEG", "TER", "QUA", "QUI", "SEX", "SAB"];
+    const TODAY_KEY = JS_DAY_TO_KEY[new Date().getDay()];
+
+    const STORAGE_KEY = "gustavo_fit_v1";
+    let state = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+    if (!state.completed) state.completed = {};
+    if (!state.weights) state.weights = {};
+
+    let selectedDay = TODAY_KEY;
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      const label = document.getElementById("saveLabel");
+      label.textContent = "✓ Salvo agora";
+      setTimeout(() => {
+        label.textContent = "✓ Salvo no aparelho";
+      }, 1200);
+    }
+
+    function getDayCompletion(dayKey) {
+      const tasks = WORKOUT_PLAN[dayKey].tasks;
+      const doneCount = tasks.filter(t => state.completed[t.id]).length;
+      const pct = tasks.length ? Math.round((doneCount / tasks.length) * 100) : 0;
+      return { doneCount, total: tasks.length, pct };
+    }
+
+    function renderWeek() {
+      const grid = document.getElementById("weekGrid");
+      grid.innerHTML = "";
+
+      DAY_KEYS.forEach(key => {
+        const day = WORKOUT_PLAN[key];
+        const { pct } = getDayCompletion(key);
+        const pill = document.createElement("div");
+        pill.className = `day-pill ${day.isOff ? "off" : ""} ${selectedDay === key ? "active" : ""}`;
+        pill.onclick = () => {
+          selectedDay = key;
+          renderAll();
+        };
+
+        const todayBadge = key === TODAY_KEY ? `<div class="today-badge">HOJE</div>` : "";
+        const subText = day.isOff ? (pct > 0 ? `${pct}%` : "OFF") : `${pct}%`;
+
+        pill.innerHTML = `
+          ${todayBadge}
+          <div class="day-name">${day.short}</div>
+          <div class="day-sub">${subText}</div>
+        `;
+        grid.appendChild(pill);
+      });
+    }
+
+    function renderDayContent() {
+      const day = WORKOUT_PLAN[selectedDay];
+      const { doneCount, total, pct } = getDayCompletion(selectedDay);
+
+      const badge = document.getElementById("dayBadge");
+      badge.className = `tag-pill ${day.isOff ? "" : "workout"}`;
+      badge.textContent = (day.isOff ? "🔋 " : "🔥 ") + day.badge;
+
+      document.getElementById("heroTitle").textContent = day.title;
+      document.getElementById("heroDesc").textContent = day.desc;
+      document.getElementById("progressLabel").textContent = day.progressTitle;
+      document.getElementById("progressStats").textContent = `${doneCount}/${total} (${pct}%)`;
+      document.getElementById("progressFill").style.width = `${pct}%`;
+      document.getElementById("sectionLabel").textContent = day.sectionTitle;
+
+      const list = document.getElementById("taskList");
+      list.innerHTML = "";
+
+      day.tasks.forEach(task => {
+        const isDone = !!state.completed[task.id];
+        const currentWeight = state.weights[task.id] !== undefined ? state.weights[task.id] : task.defaultWeight;
+
+        const item = document.createElement("div");
+        item.className = `task-item ${isDone ? "done" : ""}`;
+
+        const top = document.createElement("div");
+        top.className = "task-top";
+        top.onclick = () => {
+          state.completed[task.id] = !state.completed[task.id];
+          saveState();
+          renderAll();
+        };
+
+        top.innerHTML = `
+          <div class="checkbox">
+            ${isDone ? `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>` : ""}
+          </div>
+          <div class="task-info">
+            <div class="task-name">${task.name}</div>
+            <div class="task-meta">${task.meta}</div>
+          </div>
+        `;
+
+        item.appendChild(top);
+
+        if (task.hasWeight) {
+          const wRow = document.createElement("div");
+          wRow.className = "weight-row";
+          wRow.innerHTML = `
+            <span class="weight-label">Carga atual</span>
+            <div class="weight-controls">
+              <button class="step-btn" data-delta="-1">−</button>
+              <input type="number" step="0.5" min="0" class="weight-input" value="${currentWeight}" />
+              <span class="unit-text">kg</span>
+              <button class="step-btn" data-delta="1">+</button>
+            </div>
+          `;
+
+          const input = wRow.querySelector(".weight-input");
+          const [minusBtn, plusBtn] = wRow.querySelectorAll(".step-btn");
+
+          minusBtn.onclick = () => {
+            const val = Math.max(0, (parseFloat(input.value) || 0) - 1);
+            input.value = val;
+            state.weights[task.id] = val;
+            saveState();
+          };
+
+          plusBtn.onclick = () => {
+            const val = (parseFloat(input.value) || 0) + 1;
+            input.value = val;
+            state.weights[task.id] = val;
+            saveState();
+          };
+
+          input.onchange = () => {
+            const val = Math.max(0, parseFloat(input.value) || 0);
+            input.value = val;
+            state.weights[task.id] = val;
+            saveState();
+          };
+
+          item.appendChild(wRow);
+        }
+
+        list.appendChild(item);
+      });
+    }
+
+    function renderAll() {
+      renderWeek();
+      renderDayContent();
+    }
+
+    document.getElementById("resetDayBtn").onclick = () => {
+      WORKOUT_PLAN[selectedDay].tasks.forEach(t => {
+        delete state.completed[t.id];
+      });
+      saveState();
+      renderAll();
+    };
+
+    let timerSeconds = 0;
+    let timerInterval = null;
+
+    function formatTime(sec) {
+      const m = String(Math.floor(sec / 60)).padStart(2, "0");
+      const s = String(sec % 60).padStart(2, "0");
+      return `${m}:${s}`;
+    }
+
+    const timerDisplay = document.getElementById("timerDisplay");
+    const timerToggle = document.getElementById("timerToggle");
+    const timerReset = document.getElementById("timerReset");
+    const timerDot = document.getElementById("timerDot");
+
+    timerToggle.onclick = () => {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+        timerDot.classList.remove("running");
+        timerToggle.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>`;
+      } else {
+        timerDot.classList.add("running");
+        timerToggle.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>`;
+        timerInterval = setInterval(() => {
+          timerSeconds++;
+          timerDisplay.textContent = formatTime(timerSeconds);
+        }, 1000);
+      }
+    };
+
+    timerReset.onclick = () => {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      timerSeconds = 0;
+      timerDisplay.textContent = "00:00";
+      timerDot.classList.remove("running");
+      timerToggle.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>`;
+    };
+
+    renderAll();
+  </script>
+</body>
+</html>
