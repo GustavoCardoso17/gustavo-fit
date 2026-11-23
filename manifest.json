@@ -1,0 +1,17 @@
+{
+  "name": "GUSTAVO FIT • Treino Sem Frescura",
+  "short_name": "Gustavo Fit",
+  "start_url": "/gustavo-fit/",
+  "scope": "/gustavo-fit/",
+  "display": "standalone",
+  "background_color": "#0B0F17",
+  "theme_color": "#0B0F17",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='120' fill='%23FF5500'/%3E%3Cpath d='M128 205h40v102h-40zm216 0h40v102h-40zM168 240h176v32H168zM92 225h36v62H92zm292 0h36v62h-36z' fill='%23FFFFFF'/%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
